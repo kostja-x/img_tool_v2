@@ -1,0 +1,24 @@
+name: Build Python Application
+
+on: [push]
+
+jobs:
+  build-windows-exe:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+    - name: Install Dependencies
+      run: |
+        pip install pyinstaller
+    - name: Build EXE with PyInstaller
+      run: |
+        pyinstaller --onefile --windowed tg_img_fast_solution.py
+    - name: Upload EXE as Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: windows-exe
+        path: dist/*.exe
