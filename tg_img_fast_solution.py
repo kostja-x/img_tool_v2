@@ -1,12 +1,22 @@
 import tkinter as tk
-from tkinter import filedialog, messagebox, ttk
-from PIL import Image, ExifTags
+from tkinter import filedialog, messagebox
+from PIL import Image
 import os
+import sys
 import json
+
+# Hilfsfunktion, um den Pfad für die Ressourcendatei zu erhalten
+def resource_path(relative_path):
+    """ 
+    Get absolute path to resource, works for development and for PyInstaller.
+    """
+    base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
+    return os.path.join(base_path, relative_path)
 
 # Laden der Benutzerdaten aus einer Konfigurationsdatei
 def load_user_credentials():
-    with open("user_credentials.json", "r") as file:
+    user_credentials_path = resource_path('user_credentials.json')
+    with open(user_credentials_path, "r") as file:
         return json.load(file)
 
 # Funktion zum Quadratischmachen der Bilder
@@ -15,7 +25,7 @@ def adjust_image_size(directory):
     os.makedirs(output_directory, exist_ok=True)
     
     for file in os.listdir(directory):
-        if file.lower().endswith(('.png', '.jpg', '.jpeg')):
+        if file.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp','.tiff', '.tif', '.webp', '.svg')):
             image_path = os.path.join(directory, file)
             output_path = os.path.join(output_directory, file)
             
